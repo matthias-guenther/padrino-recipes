@@ -93,7 +93,6 @@ appended to the name (i.e **sampleblog_template.rb**). Included template are:
 
 - ar\_textile: Full support to textile with ActiveRecord.
 - blueprint: Install the [blueprint grid system](https://github.com/joshuaclayton/blueprint-css).
-- carrierwave: Plugin for [Carrierwave](https://github.com/carrierwaveuploader/carrierwave).
 - coderay: Code Highlighting via [rack-coderay](https://github.com/rubychan/coderay).
 - raphaeljs: Add [RaphaelJS](https://github.com/DmitryBaranovskiy/raphael) libraries.
 

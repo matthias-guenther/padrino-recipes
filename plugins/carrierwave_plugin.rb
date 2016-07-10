@@ -1,8 +1,27 @@
 ##
 # Carrierwave plugin for Padrino
-# sudo gem install carrierwave
-# http://github.com/jnicklas/carrierwave
+# prereqs:
 #
+# gem install carrierwave
+# https://github.com/carrierwaveuploader/carrierwave
+#
+generate :model, "upload file:text created_at:datetime"
+
+case fetch_component_choice(:orm)
+when 'mini_record'
+  prepend_file destination_root('models/upload.rb'), "require 'carrierwave/orm/activerecord'\n"
+when 'datamapper'
+  prepend_file destination_root('models/upload.rb'), "require 'carrierwave/datamapper'\n"
+  inject_into_file destination_root('models/upload.rb'),", :auto_validation => false\n", :after => "property :file, Text"
+  require_dependencies 'carrierwave-datamapper', :require => 'carrierwave/datamapper'
+when 'mongoid'
+  require_dependencies 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
+when 'sequel'
+  require_dependencies 'carrierwave-sequel', :require => 'carrierwave/sequel'
+else
+  prepend_file destination_root('models/upload.rb'), "require 'carrierwave/orm/#{fetch_component_choice(:orm)}'\n"
+end
+
 UPLOADER = <<-UPLOADER
 class Uploader < CarrierWave::Uploader::Base
 
@@ -82,23 +101,7 @@ class Uploader < CarrierWave::Uploader::Base
   # end
 end
 UPLOADER
+
 create_file destination_root('lib/uploader.rb'), UPLOADER
-generate :model, "upload file:text created_at:datetime"
-
-case fetch_component_choice(:orm)
-when 'mini_record'
-  prepend_file destination_root('models/upload.rb'), "require 'carrierwave/orm/activerecord'\n"
-when 'datamapper'
-  prepend_file destination_root('models/upload.rb'), "require 'carrierwave/datamapper'\n"
-  inject_into_file destination_root('models/upload.rb'),", :auto_validation => false\n", :after => "property :file, Text"
-  require_dependencies 'carrierwave-datamapper', :require => 'carrierwave/datamapper'
-when 'mongoid'
-  require_dependencies 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
-when 'sequel'
-  require_dependencies 'carrierwave-sequel', :require => 'carrierwave/sequel'
-else
-  prepend_file destination_root('models/upload.rb'), "require 'carrierwave/orm/#{fetch_component_choice(:orm)}'\n"
-end
-
 require_dependencies 'carrierwave'
 inject_into_file destination_root('models/upload.rb'),"   mount_uploader :file, Uploader\n", :before => 'end'
