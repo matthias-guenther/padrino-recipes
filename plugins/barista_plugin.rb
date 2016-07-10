@@ -4,13 +4,13 @@
 #
 # gem install barista
 #
+# Find more options for Barista at:
+# https://github.com/Sutto/barista
+#
 COFFEE = <<-COFFEE
 module BaristaInitializer
 
   def self.registered(app)
-    # Find more options for Barista at:
-    # https://github.com/Sutto/barista
-    #
     Barista.configure do |c|
 
       # Change the root to use app/scripts
@@ -46,9 +46,9 @@ end
 COFFEE
 
 APP_INIT = <<-INIT
-  configure :development do
-    register BaristaInitializer
-  end
+    configure :development do
+      register BaristaInitializer
+    end
 INIT
 
 create_file destination_root('lib/barista_init.rb'), COFFEE
